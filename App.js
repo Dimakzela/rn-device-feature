@@ -1,19 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import PlacesNav from "./app/navigation/PlacesNavigation";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import placesReducer from './app/store/places.reducer'
+import ReduxThunk from 'redux-thunk'
+import {Provider} from "react-redux";
+
+const rootReducer = combineReducers({
+    places: placesReducer
+});
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+    return (
+        <Provider store={store}>
+          <PlacesNav/>
+        </Provider>
+    );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
