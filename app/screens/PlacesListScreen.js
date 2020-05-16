@@ -1,18 +1,25 @@
-import {FlatList, StyleSheet} from "react-native";
-import React from "react";
+import {FlatList} from "react-native";
+import React, {useEffect} from "react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PlaceItem from "../components/PlaceItem";
+import * as placesActions from '../store/places.action'
 
 const PlaceListScreen = (props) => {
+    const dispatch = useDispatch();
     const places = useSelector(state => state.places.places);
+
+    useEffect(() => {
+        dispatch(placesActions.loadPlaces());
+    }, [dispatch])
+
     return (
-        <FlatList data={places} renderItem={itemData =>
+        <FlatList data={places} keyExtractor={item => item.id} renderItem={itemData =>
             <PlaceItem
                 title={itemData.item.title}
-                image={null}
-                address={null}
+                image={itemData.item.imageUri}
+                address={itemData.item.address}
                 onSelect={() => {
                     props.navigation.navigate('PlaceDetails', {
                         id: itemData.item.id,
@@ -40,8 +47,6 @@ PlaceListScreen.navigationOptions = navData => {
         )
     };
 };
-
-const styles = StyleSheet.create({});
 
 export default PlaceListScreen;
 
